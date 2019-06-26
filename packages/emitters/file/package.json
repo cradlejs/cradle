@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gatewayapps/cradle.git"
+    "url": "git+https://github.com/cradlejs/cradle.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gatewayapps/cradle/issues"
+    "url": "https://github.com/cradlejs/cradle/issues"
   },
-  "homepage": "https://github.com/gatewayapps/cradle#readme",
+  "homepage": "https://github.com/cradlejs/cradle#readme",
   "publishConfig": {
     "access": "public",
     "tag": "next"

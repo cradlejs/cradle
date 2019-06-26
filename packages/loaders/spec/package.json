@@ -6,7 +6,7 @@
     "clean": "rm -r ./dist",
     "prepare": "tsc"
   },
-  "repository": "https://github.com/gatewayapps/cradle",
+  "repository": "https://github.com/cradlejs/cradle",
   "author": "Daniel Gary <daniel@gatewayapps.com>",
   "license": "ISC",
   "private": false,
