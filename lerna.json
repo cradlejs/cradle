@@ -1,0 +1,10 @@
+{
+  "packages": [
+    "packages/*",
+    "packages/loaders/*",
+    "packages/emitters/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "0.1.0"
+}

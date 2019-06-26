@@ -1,0 +1,27 @@
+{
+  "name": "@cradlejs/spec-loader",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -r ./dist",
+    "prepare": "tsc"
+  },
+  "repository": "https://github.com/gatewayapps/cradle",
+  "author": "Daniel Gary <daniel@gatewayapps.com>",
+  "license": "ISC",
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "tag": "next"
+  },
+  "dependencies": {
+    "@cradlejs/core": "^0.1.0",
+    "chevrotain": "3.7.4",
+    "glob": "^7.1.4",
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-markdown": "^2.0.6"
+  }
+}
