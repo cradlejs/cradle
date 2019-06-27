@@ -23,7 +23,7 @@ import {
 import { parse } from 'path'
 
 export class TypeScriptEmitter extends FileEmitter {
-  private tsProject: Project
+  protected tsProject: Project
 
   constructor(options: FileEmitterOptionsArgs, output: string, _console: IConsole) {
     super(options, output, _console)
@@ -38,15 +38,19 @@ export class TypeScriptEmitter extends FileEmitter {
 
   async emitSchema(schema: CradleSchema) {
     if (this.outputType === 'oneFilePerModel') {
-      schema.Models.forEach((model) => {
-        const modelPath = this.getFilePathForModel(model)
-        const parsed = parse(modelPath)
-        const sourceFile = this.tsProject.createSourceFile(parsed.base)
-        sourceFile.addInterface({ name: `I${model.Name}`, isExported: true })
-      })
+      this.prepareProject(schema)
     }
 
     return super.emitSchema(schema)
+  }
+
+  protected prepareProject(schema: CradleSchema) {
+    schema.Models.forEach((model) => {
+      const modelPath = this.getFilePathForModel(model)
+      const parsed = parse(modelPath)
+      const sourceFile = this.tsProject.createSourceFile(parsed.base)
+      sourceFile.addInterface({ name: `I${model.Name}`, isExported: true })
+    })
   }
 
   async getContentsForModel(model: CradleModel): Promise<string> {
@@ -88,7 +92,7 @@ export class TypeScriptEmitter extends FileEmitter {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }
 
-  private wrapMapType(propertyType: PropertyType) {
+  protected wrapMapType(propertyType: PropertyType) {
     const actualType = this.mapType(propertyType)
     if (propertyType.AllowNull) {
       return `${actualType} | null`
@@ -97,7 +101,7 @@ export class TypeScriptEmitter extends FileEmitter {
     }
   }
 
-  private mapType(propertyType: PropertyType): string {
+  protected mapType(propertyType: PropertyType): string {
     switch (propertyType.TypeName) {
       case PropertyTypes.Boolean: {
         return 'boolean'
