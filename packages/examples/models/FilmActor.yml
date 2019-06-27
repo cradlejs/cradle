@@ -1,0 +1,23 @@
+Film:
+  operations:
+    createFilm:
+      returns: Film
+      arguments:
+        name:
+        totalBoxOffice: decimal min(0)
+  properties:
+    id: integer primary auto(1,1)
+    name: string(100) @format("title")
+    totalBoxOffice: decimal min(0)
+    releaseDate: datetime
+    isDeleted: boolean default(false) delete
+    actors:
+      isArray: true
+      modelRef: Actor
+
+Actor:
+  properties:
+    id: integer primary auto(1,1)
+    firstName: string(100)? default("John")
+    lastName: string(100) allow( "Gary", "Neff", "Murphy")
+    dateOfBirth: datetime encrypted @sensitive
