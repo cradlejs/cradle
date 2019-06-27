@@ -58,6 +58,8 @@
       "path": "packages/core"
     },{
       "path": "packages/emitters/file"
+    },{
+      "path": "packages/emitters/typescript"
     }
   ]
 }
