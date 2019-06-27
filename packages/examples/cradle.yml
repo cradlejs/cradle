@@ -1,0 +1,27 @@
+loader:
+  module: '@cradlejs/spec-loader'
+  options:
+    source: './models/**/*.yml'
+emitters:
+  graphql:
+    module: '@cradlejs/graphql-emitter'
+    output: './output/{{Name}}.graphql'
+    options:
+      overwrite: true
+      afterEmitCommand: yarn prettier --write ./output/**.*
+      formatting: 'none'
+  typescript:
+    module: '@cradlejs/typescript-emitter'
+    output: './output/types.ts'
+    options:
+      overwrite: true
+      formatting: 'prettier'
+      prettierConfig:
+        semi: false
+        singleQuote: true
+  sequelize:
+    module: '@cradlejs/typescript-sequelize-emitter'
+    output: './output/{{Name}}Model.ts'
+    options:
+      overwrite: true
+      formatting: 'prettier'

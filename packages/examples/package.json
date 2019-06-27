@@ -1,0 +1,19 @@
+{
+    "name": "examples",
+    "version": "0.1.0",
+    "license": "MIT",
+    "scripts": {
+        "sequelize": "cradle emit -e sequelize",
+        "typescript": "cradle emit -e typescript",
+        "graphql": "cradle emit -e graphql"
+    },
+    "dependencies": {
+        "@cradlejs/core": "^0.1.0",
+        "@cradlejs/file-emitter": "^0.1.0",
+        "@cradlejs/graphql-emitter": "^0.1.0",
+        "@cradlejs/spec-loader": "^0.1.0",
+        "@cradlejs/typescript-emitter": "^0.1.0",
+        "@cradlejs/typescript-sequelize-emitter": "^0.1.0",
+        "sequelize": "^5.8.12"
+    }
+}
