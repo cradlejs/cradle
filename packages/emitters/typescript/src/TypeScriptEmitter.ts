@@ -92,8 +92,8 @@ export class TypeScriptEmitter extends FileEmitter {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }
 
-  protected wrapMapType(propertyType: PropertyType) {
-    const actualType = this.mapType(propertyType)
+  protected wrapMapType(propertyType: PropertyType, noInterface: boolean = false) {
+    const actualType = this.mapType(propertyType, noInterface)
     if (propertyType.AllowNull) {
       return `${actualType} | null`
     } else {
@@ -101,7 +101,7 @@ export class TypeScriptEmitter extends FileEmitter {
     }
   }
 
-  protected mapType(propertyType: PropertyType): string {
+  protected mapType(propertyType: PropertyType, noInterface: boolean = false): string {
     switch (propertyType.TypeName) {
       case PropertyTypes.Boolean: {
         return 'boolean'
@@ -136,11 +136,11 @@ export class TypeScriptEmitter extends FileEmitter {
       }
       case PropertyTypes.ImportModel: {
         const importType = propertyType as ImportModelType
-        return `I${importType.ModelName}`
+        return `${noInterface ? '' : 'I'}${importType.ModelName}`
       }
       case PropertyTypes.ReferenceModel: {
         const referenceType = propertyType as ReferenceModelType
-        return `I${referenceType.ModelName}`
+        return `${noInterface ? '' : 'I'}${referenceType.ModelName}`
       }
       // case PropertyTypes.Object: {
       //   return 'object'
