@@ -16,7 +16,8 @@ import {
   CradleSchema,
   PropertyTypes,
   StringPropertyType,
-  DecimalPropertyType
+  DecimalPropertyType,
+  IntegerPropertyType
 } from '@cradlejs/core'
 import { parse } from 'path'
 import { TypeScriptSequelizeEmitterOptions } from './TypeScriptSequelizeEmitterOptions'
@@ -63,7 +64,7 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
         isReadonly: true,
         scope: Scope.Public,
         leadingTrivia,
-        type: this.wrapMapType(model.Properties[propName])
+        type: this.wrapMapType(model.Properties[propName], true)
       })
     })
     return properties
@@ -71,20 +72,60 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
 
   // more reference her https://dsherret.github.io/ts-morph/details/object-literal-expressions
 
-  private getSequelizeDefinition(model: CradleModel): PropertyAssignment[] {
-    const propertyAssignments: PropertyAssignment[] = []
+  private buildInitializerBody(model: CradleModel): string {
+    const initializeBodyParts: string[] = []
 
     const propertyNames = Object.keys(model.Properties)
     propertyNames.forEach((propName) => {
       const propType: PropertyType = model.Properties[propName]
       const sequelizeType = this.mapSequelizeType(propType)
       if (sequelizeType) {
-        const prop: PropertyAssignment = { name: propName, initializer: sequelizeType }
-        propertyAssignments.push({})
+        let defaultValue: string | undefined = undefined
+        if (propType.DefaultValue !== undefined) {
+          switch (propType.TypeName) {
+            case PropertyTypes.DateTime: {
+              if (propType.DefaultValue === 'DateTimeNow') {
+                defaultValue = 'DataTypes.NOW'
+              } else {
+                defaultValue = propType.DefaultValue
+              }
+              break
+            }
+            case PropertyTypes.UniqueIdentifier: {
+              defaultValue = 'DataTypes.UUIDV4'
+              break
+            }
+            case PropertyTypes.String: {
+              defaultValue = `'${propType.DefaultValue}'`
+              break
+            }
+            default: {
+              defaultValue = propType.DefaultValue
+            }
+          }
+        }
+        let autoIncrement = false
+        if (propType.TypeName === PropertyTypes.Integer) {
+          const intProp = propType as IntegerPropertyType
+          autoIncrement = !!intProp.Autogenerate
+        }
+        initializeBodyParts.push(`${propName}: {
+          type: ${sequelizeType},
+          allowNull: ${propType.AllowNull},
+          primaryKey: ${propType.IsPrimaryKey},
+          defaultValue: ${defaultValue},
+          autoIncrement: ${autoIncrement}
+        }`)
       }
     })
 
-    return propertyAssignments
+    return `{
+      ${initializeBodyParts.join(',')}
+    },
+      {
+        sequelize: sequelize,
+        tableName: '${model.Name}'
+      }`
   }
 
   private mapSequelizeType(prop: PropertyType): string | undefined {
@@ -118,7 +159,7 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
         return `DataTypes.BLOB`
       }
       case PropertyTypes.UniqueIdentifier: {
-        return `DataTypes.UUIDV4`
+        return `DataTypes.UUID`
       }
       default: {
         return undefined
@@ -133,10 +174,26 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
     let sourceFile: SourceFile = this.tsProject.getSourceFileOrThrow(parsed.base)
 
     const properties = this.getModelProperties(model)
-    const sequelizeDefinition = this.getSequelizeDefinition(model)
+    //const sequelizeDefinition = this.getSequelizeDefinition(model)
 
     const modelClass = sourceFile.getClassOrThrow(model.Name)
     modelClass.addProperties(properties)
+
+    const initializeMethod = modelClass.addMethod({
+      isStatic: true,
+      name: 'Initialize',
+      scope: Scope.Public,
+      parameters: [
+        {
+          name: 'sequelize',
+          type: 'Sequelize'
+        }
+      ]
+    })
+
+    const initializerBody = this.buildInitializerBody(model)
+
+    initializeMethod.addStatements(`${model.Name}.init(${initializerBody})`)
 
     if (this.outputType === 'oneFilePerModel') {
       sourceFile.fixMissingImports()

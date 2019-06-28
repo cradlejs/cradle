@@ -1,0 +1,7 @@
+Address:
+  properties:
+    userId: integer
+    address: string(128)
+    createdAt: datetime
+    updatedAt: datetime
+    user: ref User ("userId", "id")

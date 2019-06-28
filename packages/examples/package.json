@@ -3,9 +3,9 @@
     "version": "0.1.0",
     "license": "MIT",
     "scripts": {
-        "sequelize": "cradle emit -e sequelize",
-        "typescript": "cradle emit -e typescript",
-        "graphql": "cradle emit -e graphql"
+        "emit-sequelize": "cradle emit -e sequelize",
+        "emit-typescript": "cradle emit -e typescript",
+        "emit-graphql": "cradle emit -e graphql"
     },
     "dependencies": {
         "@cradlejs/core": "^0.1.0",
