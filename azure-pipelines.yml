@@ -1,29 +1,57 @@
 jobs:
-- job: Test
-  pool:
-    vmImage: 'ubuntu-16.04'
-  steps:
-  - task: NodeTool@0 
-    inputs:
-      versionSpec: '10.x'
-  - script: |
-      npm install
-      npm test
-
-- job: Publish
-  pool:
-    vmImage: 'ubuntu-16.04'
-  dependsOn: Test
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-  - script: npm install
-  - task: Npm@1
-    inputs:
-        command: publish
-        publishRegistry: useExternalRegistry
-        publishEndpoint: npmjs
-
-
+  - job: Test
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+      - script: |
+          yarn install
+          yarn lerna run prepare
+  - job: Publish
+    pool:
+      vmImage: 'ubuntu-16.04'
+    dependsOn: Test
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    steps:
+      - task: NodeTool@0
+        displayName: Install dependencies
+        inputs:
+          versionSpec: '10.x'
+      - script: yarn install
+      - task: Npm@1
+      - displayName: Publish @cradlejs/cradle
+        inputs:
+          command: publish
+          workingDir: ./packages/core
+          publishRegistry: useExternalRegistry
+          publishEndpoint: npmjs
+      - task: Npm@1
+      - displayName: Publish @cradlejs/spec-loader
+        inputs:
+          command: publish
+          workingDir: ./packages/loaders/spec
+          publishingRegistry: useExternalRegistry
+          publishEndpoint: npmjs
+      - task: Npm@1
+      - displayName: Publish @cradlejs/file-emitter
+        inputs:
+          command: publish
+          workingDir: ./packages/emitters/file
+          publishingRegistry: useExternalRegistry
+          publishEndpoint: npmjs
+      - task: Npm@1
+      - displayName: Publish @cradlejs/graphql-emitter
+        inputs:
+          command: publish
+          workingDir: ./packages/emitters/graphql
+          publishingRegistry: useExternalRegistry
+          publishEndpoint: npmjs
+      - task: Npm@1
+      - displayName: Publish @cradlejs/typescript-emitter
+        inputs:
+          command: publish
+          workingDir: ./packages/emitters/typescript
+          publishingRegistry: useExternalRegistry
+          publishEndpoint: npmjs

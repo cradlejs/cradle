@@ -18,8 +18,7 @@
   },
   "homepage": "https://github.com/cradlejs/cradle#readme",
   "publishConfig": {
-    "access": "public",
-    "tag": "next"
+    "access": "public"    
   },
   "dependencies": {
     "@cradlejs/core": "^0.1.0",
