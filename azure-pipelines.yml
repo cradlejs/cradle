@@ -16,40 +16,40 @@ jobs:
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
     steps:
       - task: NodeTool@0
-        displayName: Install dependencies
         inputs:
           versionSpec: '10.x'
       - script: yarn install
+        displayName: Install dependencies
       - task: Npm@1
-      - displayName: Publish @cradlejs/cradle
+        displayName: Publish @cradlejs/cradle
         inputs:
           command: publish
           workingDir: ./packages/core
           publishRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
-      - displayName: Publish @cradlejs/spec-loader
+        displayName: Publish @cradlejs/spec-loader
         inputs:
           command: publish
           workingDir: ./packages/loaders/spec
           publishingRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
-      - displayName: Publish @cradlejs/file-emitter
+        displayName: Publish @cradlejs/file-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/file
           publishingRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
-      - displayName: Publish @cradlejs/graphql-emitter
+        displayName: Publish @cradlejs/graphql-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/graphql
           publishingRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
-      - displayName: Publish @cradlejs/typescript-emitter
+        displayName: Publish @cradlejs/typescript-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/typescript
