@@ -32,26 +32,26 @@ jobs:
         inputs:
           command: publish
           workingDir: ./packages/loaders/spec
-          publishingRegistry: useExternalRegistry
+          publishRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
         displayName: Publish @cradlejs/file-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/file
-          publishingRegistry: useExternalRegistry
+          publishRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
         displayName: Publish @cradlejs/graphql-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/graphql
-          publishingRegistry: useExternalRegistry
+          publishRegistry: useExternalRegistry
           publishEndpoint: npmjs
       - task: Npm@1
         displayName: Publish @cradlejs/typescript-emitter
         inputs:
           command: publish
           workingDir: ./packages/emitters/typescript
-          publishingRegistry: useExternalRegistry
+          publishRegistry: useExternalRegistry
           publishEndpoint: npmjs
