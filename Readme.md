@@ -1,4 +1,4 @@
-# Cradle - A Schema Pipeline [![Build Status](https://gatewayapps.visualstudio.com/Cradle/_apis/build/status/Cradle%20CI)](https://gatewayapps.visualstudio.com/Cradle/_build/latest?definitionId=34)
+# Cradle - A Schema Pipeline [![Build Status](https://dev.azure.com/gatewayapps/cradlejs/_apis/build/status/cradlejs.cradle?branchName=master)](https://dev.azure.com/gatewayapps/cradlejs/_build/latest?definitionId=46&branchName=master)
 
 ## What is Cradle?
 
