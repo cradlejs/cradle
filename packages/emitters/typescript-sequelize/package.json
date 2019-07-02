@@ -6,16 +6,16 @@
   "scripts": {
     "clean": "rm -r ./dist"
   },
+  "homepage": "https://cradlejs.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cradlejs/cradle.git"
+    "url": "https://github.com/cradlejs/cradle.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/cradlejs/cradle/issues"
   },
-  "homepage": "https://github.com/cradlejs/cradle#readme",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@cradlejs/core": "^0.1.0",
     "@cradlejs/typescript-emitter": "^0.1.0",

@@ -2,6 +2,15 @@
   "name": "@cradlejs/core",
   "version": "0.1.0",
   "description": "",
+  "homepage": "https://cradlejs.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cradlejs/cradle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cradlejs/cradle/issues"
+  },
+  "readme": "",
   "main": "./dist/index.js",
   "bin": {
     "cradle": "./dist/cli/CradleCLI.js"
