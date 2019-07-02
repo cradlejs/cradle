@@ -23,7 +23,7 @@ import {
 import { parse } from 'path'
 
 export class TypeScriptEmitter extends FileEmitter {
-  private tsProject: Project
+  protected tsProject: Project
 
   constructor(options: FileEmitterOptionsArgs, output: string, _console: IConsole) {
     super(options, output, _console)
