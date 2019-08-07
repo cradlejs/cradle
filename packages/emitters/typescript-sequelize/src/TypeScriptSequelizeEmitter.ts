@@ -33,9 +33,9 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
 
   protected prepareProject(schema: CradleSchema) {
     schema.Models.forEach((model) => {
-      const modelPath = this.getFilePathForModel(model)
+      const modelPath = super.getFilePathForModel(model)
       const parsed = parse(modelPath)
-      const sourceFile = this.tsProject.createSourceFile(parsed.base)
+      const sourceFile = super.tsProject.createSourceFile(parsed.base)
       sourceFile.addImportDeclarations([
         {
           namedImports: ['Sequelize', 'Model', 'DataTypes'],
@@ -64,7 +64,7 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
         isReadonly: true,
         scope: Scope.Public,
         leadingTrivia,
-        type: this.wrapMapType(model.Properties[propName], true)
+        type: super.wrapMapType(model.Properties[propName], true)
       })
     })
     return properties
@@ -168,10 +168,10 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
   }
 
   async getContentsForModel(model: CradleModel): Promise<string> {
-    const modelPath = this.getFilePathForModel(model)
+    const modelPath = super.getFilePathForModel(model)
     const parsed = parse(modelPath)
 
-    let sourceFile: SourceFile = this.tsProject.getSourceFileOrThrow(parsed.base)
+    let sourceFile: SourceFile = super.tsProject.getSourceFileOrThrow(parsed.base)
 
     const properties = this.getModelProperties(model)
     //const sequelizeDefinition = this.getSequelizeDefinition(model)
@@ -195,7 +195,7 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
 
     initializeMethod.addStatements(`${model.Name}.init(${initializerBody})`)
 
-    if (this.outputType === 'oneFilePerModel') {
+    if (super.outputType === 'oneFilePerModel') {
       sourceFile.fixMissingImports()
     }
 
