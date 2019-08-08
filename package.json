@@ -2,7 +2,11 @@
   "scripts": {
     "setversion": "lerna version --no-git-tag-version --yes",
     "clean": "lerna run clean",
-    "prepare": "lerna run prepare"
+    "prepare": "lerna run prepare",
+    "build-typescript-sequelize": "lerna run build-typescript-sequelize",
+    "emit-sequelize": "lerna run emit-sequelize",
+    "build-and-try-sequelize": "yarn build-typescript-sequelize && yarn emit-sequelize"
+
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
