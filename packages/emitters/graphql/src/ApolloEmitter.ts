@@ -131,7 +131,15 @@ ${mutationDefs.join('\n')}
     }
   }
 
+  private shouldExcludeFromRootQuery(model: CradleModel) {
+    return !!model.Meta['noRootQuery']
+  }
+
   public getQueryDefsForModel(model: CradleModel): string {
+    if (this.shouldExcludeFromRootQuery(model)) {
+      return ''
+    }
+
     const singularQueryNameBase = _.camelCase(pluralize(model.Name, 1))
     const pluralQueryName = _.camelCase(pluralize(model.Name, 2))
 
@@ -278,6 +286,10 @@ ${localFields.join('\n')}
   }
 
   private generateUniqueFilterInputType(model: CradleModel): string {
+    if (this.shouldExcludeFromRootQuery(model)) {
+      return ''
+    }
+
     const propNames = this.getIdentifiersForModel(model)
     const resultParts: string[] = []
     propNames.forEach((pn) => {
