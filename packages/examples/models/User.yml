@@ -1,0 +1,9 @@
+User:
+  properties:
+    id: integer primary auto(1,1)
+    name: string(128)
+    preferredName: string(128)?
+    createdAt: datetime
+    updatedAt: datetime
+    projects: ref Project[] ("id", "ownerId")
+    address: ref Address ("id", "userId")

@@ -38,15 +38,19 @@ export class TypeScriptEmitter extends FileEmitter {
 
   async emitSchema(schema: CradleSchema) {
     if (this.outputType === 'oneFilePerModel') {
-      schema.Models.forEach((model) => {
-        const modelPath = this.getFilePathForModel(model)
-        const parsed = parse(modelPath)
-        const sourceFile = this.tsProject.createSourceFile(parsed.base)
-        sourceFile.addInterface({ name: `I${model.Name}`, isExported: true })
-      })
+      this.prepareProject(schema)
     }
 
     return super.emitSchema(schema)
+  }
+
+  protected prepareProject(schema: CradleSchema) {
+    schema.Models.forEach((model) => {
+      const modelPath = this.getFilePathForModel(model)
+      const parsed = parse(modelPath)
+      const sourceFile = this.tsProject.createSourceFile(parsed.base)
+      sourceFile.addInterface({ name: `I${model.Name}`, isExported: true })
+    })
   }
 
   async getContentsForModel(model: CradleModel): Promise<string> {
@@ -84,12 +88,12 @@ export class TypeScriptEmitter extends FileEmitter {
 
     return sourceFile.print()
   }
-  async mergeFileContents(modelFileContents: any[]): Promise<string> {
+  async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }
 
-  private wrapMapType(propertyType: PropertyType) {
-    const actualType = this.mapType(propertyType)
+  protected wrapMapType(propertyType: PropertyType, noInterface: boolean = false) {
+    const actualType = this.mapType(propertyType, noInterface)
     if (propertyType.AllowNull) {
       return `${actualType} | null`
     } else {
@@ -97,7 +101,7 @@ export class TypeScriptEmitter extends FileEmitter {
     }
   }
 
-  private mapType(propertyType: PropertyType): string {
+  protected mapType(propertyType: PropertyType, noInterface: boolean = false): string {
     switch (propertyType.TypeName) {
       case PropertyTypes.Boolean: {
         return 'boolean'
@@ -126,17 +130,17 @@ export class TypeScriptEmitter extends FileEmitter {
         if (typeof arrayType.MemberType === 'string') {
           return `${arrayType.MemberType}[]`
         } else {
-          const baseType = this.mapType(arrayType.MemberType)
+          const baseType = this.mapType(arrayType.MemberType, noInterface)
           return `${baseType}[]`
         }
       }
       case PropertyTypes.ImportModel: {
         const importType = propertyType as ImportModelType
-        return `I${importType.ModelName}`
+        return `${noInterface ? '' : 'I'}${importType.ModelName}`
       }
       case PropertyTypes.ReferenceModel: {
         const referenceType = propertyType as ReferenceModelType
-        return `I${referenceType.ModelName}`
+        return `${noInterface ? '' : 'I'}${referenceType.ModelName}`
       }
       // case PropertyTypes.Object: {
       //   return 'object'

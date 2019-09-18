@@ -1,0 +1,8 @@
+Project:
+  properties:
+    id: integer auto(1,1) primary
+    ownerId: integer
+    name: string(128)
+    createdAt: datetime
+    updatedAt: datetime
+    owner: ref User ("ownerId", "id")

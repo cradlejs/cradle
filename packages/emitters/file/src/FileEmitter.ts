@@ -42,7 +42,7 @@ export abstract class FileEmitter extends CradleEmitterBase {
       //  Single file, doesn't matter
       const finalPath = this.getFilePathForModel(schema.Models[0])
       if (this.checkExists(finalPath, overwrite)) {
-        const finalContents = await this.mergeFileContents(this.ModelFileContents)
+        const finalContents = await this.mergeFileContents(this.ModelFileContents, schema.Models)
         this.writeFileToDisk(finalContents, finalPath)
       }
     }
@@ -129,5 +129,5 @@ export abstract class FileEmitter extends CradleEmitterBase {
 
   public abstract async getContentsForModel(model: CradleModel): Promise<string>
 
-  public abstract async mergeFileContents(modelFileContents: ModelFileContents[]): Promise<string>
+  public abstract async mergeFileContents(modelFileContents: ModelFileContents[], models: CradleModel[]): Promise<string>
 }

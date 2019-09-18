@@ -1,6 +1,6 @@
 {
   "name": "@cradlejs/file-emitter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Base Cradle File Emitter.",
   "main": "./dist/index.js",
   "scripts": {
@@ -17,12 +17,11 @@
   },
   "author": "",
   "license": "ISC",
-
   "publishConfig": {
-    "access": "public"    
+    "access": "public"
   },
   "dependencies": {
-    "@cradlejs/core": "^0.1.0",
+    "@cradlejs/core": "^0.2.0",
     "fs-extra": "^8.0.1",
     "prettier": "^1.18.2"
   },
