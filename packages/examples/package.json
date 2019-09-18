@@ -1,6 +1,7 @@
 {
     "name": "examples",
     "version": "0.1.0",
+    "private": true,
     "license": "MIT",
     "scripts": {
         "emit-sequelize": "cradle emit -e sequelize",
