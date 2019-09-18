@@ -5,7 +5,9 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "clean": "rm -r ./dist"
+    "clean": "rm -r ./dist",
+    "prepare": "tsc",
+    "build-typescript-sequelize": "tsc"
   },
   "homepage": "https://cradlejs.dev",
   "repository": {

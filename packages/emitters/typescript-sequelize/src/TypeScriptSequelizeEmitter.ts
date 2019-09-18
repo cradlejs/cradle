@@ -1,12 +1,10 @@
-import ts, { PropertyAssignment } from 'typescript'
+
 import {
   OptionalKind,
   SourceFile,
   PropertyDeclarationStructure,
   Scope,
-  ObjectLiteralElement,
-  VariableStatementStructure,
-  ObjectLiteralExpression
+
 } from 'ts-morph'
 
 import {
@@ -28,22 +26,34 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
 
   constructor(options: TypeScriptSequelizeEmitterOptions, output: string, _console: IConsole) {
     super(options, output, _console)
+
+    if (this.outputType === 'oneFilePerModel') {
+      throw new Error('typescript-sequelize emitter only supports single file output')
+    }
+
     this.options = options
+
+  }
+
+  async emitSchema(schema: CradleSchema) {
+    this.prepareProject(schema)
+    super.emitSchema(schema)
   }
 
   protected prepareProject(schema: CradleSchema) {
+
+
+    const sourceFile = this.tsProject.createSourceFile(this.output)
+    sourceFile.addImportDeclarations([
+      {
+        namedImports: ['Sequelize', 'Model', 'DataTypes'],
+        moduleSpecifier: 'sequelize'
+      }
+    ])
     schema.Models.forEach((model) => {
-      const modelPath = this.getFilePathForModel(model)
-      const parsed = parse(modelPath)
-      const sourceFile = this.tsProject.createSourceFile(parsed.base)
-      sourceFile.addImportDeclarations([
-        {
-          namedImports: ['Sequelize', 'Model', 'DataTypes'],
-          moduleSpecifier: 'sequelize'
-        }
-      ])
       sourceFile.addClass({ name: model.Name, extends: 'Model', isExported: true })
     })
+
   }
 
   private getModelProperties(model: CradleModel): OptionalKind<PropertyDeclarationStructure>[] {
@@ -168,10 +178,13 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
   }
 
   async getContentsForModel(model: CradleModel): Promise<string> {
-    const modelPath = this.getFilePathForModel(model)
-    const parsed = parse(modelPath)
 
-    let sourceFile: SourceFile = this.tsProject.getSourceFileOrThrow(parsed.base)
+    const parsed = parse(this.output)
+
+    let sourceFile: SourceFile | undefined = this.tsProject.getSourceFile(parsed.base)
+    if (!sourceFile) {
+      sourceFile = this.tsProject.createSourceFile(parsed.base)
+    }
 
     const properties = this.getModelProperties(model)
     //const sequelizeDefinition = this.getSequelizeDefinition(model)
@@ -194,14 +207,20 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
     const initializerBody = this.buildInitializerBody(model)
 
     initializeMethod.addStatements(`${model.Name}.init(${initializerBody})`)
+    return modelClass.print()
+    // return sourceFile.print()
+  }
+  async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
+    return `import {Sequelize, Model, DataTypes, Options} from 'sequelize'
+    ${modelFileContents.map((fc) => fc.contents).join('\n\n')}
 
-    if (this.outputType === 'oneFilePerModel') {
-      sourceFile.fixMissingImports()
+    export const initialize = (sequelize: Sequelize) => {
+
+      ${models.map(m => (`${m.Name}.Initialize(sequelize)`)).join('\n')}
+
     }
 
-    return sourceFile.print()
-  }
-  async mergeFileContents(modelFileContents: any[]): Promise<string> {
-    return modelFileContents.map((fc) => fc.contents).join('\n\n')
+    `
+
   }
 }

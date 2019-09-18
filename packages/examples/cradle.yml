@@ -21,7 +21,7 @@ emitters:
         singleQuote: true
   sequelize:
     module: '@cradlejs/typescript-sequelize-emitter'
-    output: './output/{{Name}}Model.ts'
+    output: './output/sequelize.ts'
     options:
       overwrite: true
       formatting: 'prettier'

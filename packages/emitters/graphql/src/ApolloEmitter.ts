@@ -48,7 +48,7 @@ export default class ApolloEmitter extends FileEmitter {
 
     return apolloSchema
   }
-  public async mergeFileContents(modelFileContents: any[]): Promise<string> {
+  public async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
     const generalOutput: string[] = []
     const queryOutput: string[] = []
     const mutationOutput: string[] = []

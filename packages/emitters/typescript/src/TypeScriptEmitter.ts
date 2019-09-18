@@ -88,7 +88,7 @@ export class TypeScriptEmitter extends FileEmitter {
 
     return sourceFile.print()
   }
-  async mergeFileContents(modelFileContents: any[]): Promise<string> {
+  async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }
 
@@ -130,7 +130,7 @@ export class TypeScriptEmitter extends FileEmitter {
         if (typeof arrayType.MemberType === 'string') {
           return `${arrayType.MemberType}[]`
         } else {
-          const baseType = this.mapType(arrayType.MemberType)
+          const baseType = this.mapType(arrayType.MemberType, noInterface)
           return `${baseType}[]`
         }
       }
