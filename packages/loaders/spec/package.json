@@ -1,6 +1,6 @@
 {
   "name": "@cradlejs/spec-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -r ./dist",
@@ -18,10 +18,10 @@
   "license": "ISC",
   "private": false,
   "publishConfig": {
-    "access": "public"    
+    "access": "public"
   },
   "dependencies": {
-    "@cradlejs/core": "^0.1.0",
+    "@cradlejs/core": "^0.2.0",
     "chevrotain": "3.7.4",
     "glob": "^7.1.4",
     "js-yaml": "^3.13.1"

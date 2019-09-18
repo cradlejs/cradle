@@ -1,6 +1,6 @@
 {
   "name": "@cradlejs/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "homepage": "https://cradlejs.dev",
   "repository": {
@@ -33,7 +33,7 @@
     "yargs": "^12.0.2"
   },
   "publishConfig": {
-    "access": "public"    
+    "access": "public"
   },
   "devDependencies": {
     "typedoc": "^0.14.2",
