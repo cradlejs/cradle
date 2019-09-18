@@ -1,10 +1,8 @@
 import ts from 'typescript'
 import {
   Project,
-  BooleanLiteral,
   OptionalKind,
   PropertySignatureStructure,
-  StructureKind,
   SourceFile,
   InterfaceDeclaration
 } from 'ts-morph'
@@ -21,6 +19,7 @@ import {
   StringPropertyType
 } from '@cradlejs/core'
 import { parse } from 'path'
+import { ModelFileContents } from '@cradlejs/file-emitter/dist/FileEmitter'
 
 export class TypeScriptEmitter extends FileEmitter {
   protected tsProject: Project
@@ -64,7 +63,7 @@ export class TypeScriptEmitter extends FileEmitter {
       iFace = sourceFile.getInterfaceOrThrow(`I${model.Name}`)
     } else {
       sourceFile = this.tsProject.createSourceFile(`${model.Name}.ts`)
-      iFace = sourceFile.addInterface({ name: `I${model.Name}` })
+      iFace = sourceFile.addInterface({ name: `I${model.Name}`, isExported: true })
     }
 
     const propNames = Object.keys(model.Properties)
@@ -88,7 +87,7 @@ export class TypeScriptEmitter extends FileEmitter {
 
     return sourceFile.print()
   }
-  async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
+  async mergeFileContents(modelFileContents: ModelFileContents[]): Promise<string> {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }
 
