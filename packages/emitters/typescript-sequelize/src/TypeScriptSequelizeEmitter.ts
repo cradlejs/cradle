@@ -1,11 +1,4 @@
-
-import {
-  OptionalKind,
-  SourceFile,
-  PropertyDeclarationStructure,
-  Scope,
-
-} from 'ts-morph'
+import { OptionalKind, SourceFile, PropertyDeclarationStructure, Scope } from 'ts-morph'
 
 import {
   CradleModel,
@@ -20,6 +13,7 @@ import {
 import { parse } from 'path'
 import { TypeScriptSequelizeEmitterOptions } from './TypeScriptSequelizeEmitterOptions'
 import TypeScriptEmitter from '@cradlejs/typescript-emitter'
+import { ModelFileContents } from '@cradlejs/file-emitter/dist/FileEmitter'
 
 export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
   public options: TypeScriptSequelizeEmitterOptions
@@ -32,7 +26,6 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
     }
 
     this.options = options
-
   }
 
   async emitSchema(schema: CradleSchema) {
@@ -41,8 +34,6 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
   }
 
   protected prepareProject(schema: CradleSchema) {
-
-
     const sourceFile = this.tsProject.createSourceFile(this.output)
     sourceFile.addImportDeclarations([
       {
@@ -53,7 +44,6 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
     schema.Models.forEach((model) => {
       sourceFile.addClass({ name: model.Name, extends: 'Model', isExported: true })
     })
-
   }
 
   private getModelProperties(model: CradleModel): OptionalKind<PropertyDeclarationStructure>[] {
@@ -178,7 +168,6 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
   }
 
   async getContentsForModel(model: CradleModel): Promise<string> {
-
     const parsed = parse(this.output)
 
     let sourceFile: SourceFile | undefined = this.tsProject.getSourceFile(parsed.base)
@@ -210,17 +199,17 @@ export class TypeScriptSequelizeEmitter extends TypeScriptEmitter {
     return modelClass.print()
     // return sourceFile.print()
   }
-  async mergeFileContents(modelFileContents: any[], models: CradleModel[]): Promise<string> {
-    return `import {Sequelize, Model, DataTypes, Options} from 'sequelize'
-    ${modelFileContents.map((fc) => fc.contents).join('\n\n')}
+  async mergeFileContents(modelFileContents: ModelFileContents[]): Promise<string> {
+    return ''
+    // return `import {Sequelize, Model, DataTypes, Options} from 'sequelize'
+    // ${modelFileContents.map((fc) => fc.contents).join('\n\n')}
 
-    export const initialize = (sequelize: Sequelize) => {
+    // export const initialize = (sequelize: Sequelize) => {
 
-      ${models.map(m => (`${m.Name}.Initialize(sequelize)`)).join('\n')}
+    //   ${models.map(m => (`${m.Name}.Initialize(sequelize)`)).join('\n')}
 
-    }
+    // }
 
-    `
-
+    // `
   }
 }
