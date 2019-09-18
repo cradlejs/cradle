@@ -1,6 +1,6 @@
 {
     "name": "examples",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "private": true,
     "license": "MIT",
     "scripts": {
@@ -9,12 +9,12 @@
         "emit-graphql": "cradle emit -e graphql"
     },
     "dependencies": {
-        "@cradlejs/core": "^0.2.3",
-        "@cradlejs/file-emitter": "^0.2.3",
-        "@cradlejs/graphql-emitter": "^0.2.3",
-        "@cradlejs/spec-loader": "^0.2.3",
-        "@cradlejs/typescript-emitter": "^0.2.3",
-        "@cradlejs/typescript-sequelize-emitter": "^0.2.3",
+        "@cradlejs/core": "^0.2.4",
+        "@cradlejs/file-emitter": "^0.2.4",
+        "@cradlejs/graphql-emitter": "^0.2.4",
+        "@cradlejs/spec-loader": "^0.2.4",
+        "@cradlejs/typescript-emitter": "^0.2.4",
+        "@cradlejs/typescript-sequelize-emitter": "^0.2.4",
         "sequelize": "^5.8.12"
     }
 }
