@@ -132,7 +132,7 @@ ${mutationDefs.join('\n')}
   }
 
   private shouldExcludeFromRootQuery(model: CradleModel) {
-    return !!model.Meta['noRootQuery']
+    return model.Meta && !!model.Meta['noRootQuery']
   }
 
   public getQueryDefsForModel(model: CradleModel): string {
