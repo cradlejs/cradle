@@ -5,6 +5,7 @@
     "prepare": "lerna run prepare",
     "build-typescript-sequelize": "lerna run build-typescript-sequelize",
     "emit-sequelize": "lerna run emit-sequelize",
+    "emit-typescript": "lerna run emit-typescript",
     "build-and-try-sequelize": "yarn build-typescript-sequelize && yarn emit-sequelize"
 
   },

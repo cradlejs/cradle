@@ -16,10 +16,12 @@ import {
   ImportModelType,
   ReferenceModelType,
   CradleSchema,
-  StringPropertyType
+  StringPropertyType,
+  ICradleOperation
 } from '@cradlejs/core'
 import { parse } from 'path'
 import { ModelFileContents } from '@cradlejs/file-emitter/dist/FileEmitter'
+import _ from 'lodash'
 
 export class TypeScriptEmitter extends FileEmitter {
   protected tsProject: Project
@@ -81,12 +83,44 @@ export class TypeScriptEmitter extends FileEmitter {
 
     iFace.addProperties(properties)
 
+    this.addOperationArgTypes(sourceFile, model)
+
     if (this.outputType === 'oneFilePerModel') {
       sourceFile.fixMissingImports()
     }
 
     return sourceFile.print()
   }
+
+  async addOperationArgTypes(sourceFile: SourceFile, model: CradleModel) {
+    if (model.Operations) {
+      const opNames = Object.keys(model.Operations)
+      opNames.forEach((opName) => {
+        const op: ICradleOperation = model.Operations[opName]
+
+        const argNames = Object.keys(op.Arguments)
+
+        const properties: OptionalKind<PropertySignatureStructure>[] = []
+        argNames.forEach((propName) => {
+          const prop: PropertyType = op.Arguments[propName]
+          let leadingTrivia: string = ''
+
+          properties.push({
+            name: propName,
+            leadingTrivia,
+            type: this.wrapMapType(prop)
+          })
+        })
+
+        sourceFile.addInterface({
+          name: `${_.upperFirst(_.camelCase(opName))}OperationArgs`,
+          properties,
+          isExported: true
+        })
+      })
+    }
+  }
+
   async mergeFileContents(modelFileContents: ModelFileContents[]): Promise<string> {
     return modelFileContents.map((fc) => fc.contents).join('\n\n')
   }

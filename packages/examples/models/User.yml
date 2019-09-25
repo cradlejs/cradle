@@ -7,3 +7,9 @@ User:
     updatedAt: datetime
     projects: ref Project[] ("id", "ownerId")
     address: ref Address ("id", "userId")
+  operations:
+    login:
+      arguments:
+        name:
+        password: string(255)
+      returns: User
