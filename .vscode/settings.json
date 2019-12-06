@@ -11,6 +11,7 @@
     "[jsonc]": {
       "editor.formatOnSave": false
     },
+    "eslint.autoFixOnSave": true,
     "files.insertFinalNewline": true,
     "files.exclude": {
       "**/.git": true,

@@ -23,7 +23,7 @@ export abstract class FileEmitter extends CradleEmitterBase {
       : 'singleFile'
   }
 
-  private ModelFileContents: (ModelFileContents)[] = []
+  private ModelFileContents: ModelFileContents[] = []
 
   public async emitSchema(schema: CradleSchema) {
     await Promise.all(
@@ -129,5 +129,8 @@ export abstract class FileEmitter extends CradleEmitterBase {
 
   public abstract async getContentsForModel(model: CradleModel): Promise<string>
 
-  public abstract async mergeFileContents(modelFileContents: ModelFileContents[], models: CradleModel[]): Promise<string>
+  public abstract async mergeFileContents(
+    modelFileContents: ModelFileContents[],
+    models: CradleModel[]
+  ): Promise<string>
 }
