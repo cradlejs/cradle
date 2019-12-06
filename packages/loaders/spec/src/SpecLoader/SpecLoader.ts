@@ -389,18 +389,22 @@ export default class SpecLoader extends CradleLoaderBase<SpecLoaderOptions> {
           } as IConstrainablePropertyTypeOptions)
         )
       case PropertyTypes.Decimal.toLocaleUpperCase():
-        return new DecimalPropertyType(Object.assign(options, {
-          MaximumValue: spec.MaxValue,
-          MinimumValue: spec.MinValue,
-          Prevision: spec.Precision,
-          Scale: spec.Scale
-        }) as IDecimalPropertyTypeOptions)
+        return new DecimalPropertyType(
+          Object.assign(options, {
+            MaximumValue: spec.MaxValue,
+            MinimumValue: spec.MinValue,
+            Prevision: spec.Precision,
+            Scale: spec.Scale
+          }) as IDecimalPropertyTypeOptions
+        )
       case PropertyTypes.Integer.toLocaleUpperCase():
-        return new IntegerPropertyType(Object.assign(options, {
-          MaximumValue: spec.MaxValue,
-          MinimumValue: spec.MinValue,
-          Autogenerate: spec.AutogenerateOptions
-        }) as IIntegerPropertyTypeOptions)
+        return new IntegerPropertyType(
+          Object.assign(options, {
+            MaximumValue: spec.MaxValue,
+            MinimumValue: spec.MinValue,
+            Autogenerate: spec.AutogenerateOptions
+          }) as IIntegerPropertyTypeOptions
+        )
       case PropertyTypes.String.toLocaleUpperCase():
         return new StringPropertyType(
           Object.assign(options, { AllowedValues: spec.AllowedValues, MaximumLength: spec.Length })

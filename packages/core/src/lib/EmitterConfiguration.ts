@@ -14,7 +14,13 @@ export class EmitterDefinition implements IEmitterDefinition {
   public console?: IConsole
   public options: EmitterOptionsArgs
 
-  constructor(_name: string, _module: string | ICradleEmitter, _options: EmitterOptionsArgs, _output: string, _console?: IConsole) {
+  constructor(
+    _name: string,
+    _module: string | ICradleEmitter,
+    _options: EmitterOptionsArgs,
+    _output: string,
+    _console?: IConsole
+  ) {
     this.name = _name
     this.module = _module
     this.output = _output

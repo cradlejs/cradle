@@ -1,4 +1,4 @@
-import {IntegerAutogenerateOptions} from '@cradlejs/core'
+import { IntegerAutogenerateOptions } from '@cradlejs/core'
 
 export interface ISpecPropertyOptions {
   allowedValues?: any
@@ -67,9 +67,7 @@ export default class SpecProperty {
     if (Array.isArray(options.autogenerateOptions)) {
       if (options.autogenerateOptions.length !== 2) {
         throw new RangeError(
-          `Expected 2 elements in autogenerate options, received ${
-            options.autogenerateOptions
-          }`
+          `Expected 2 elements in autogenerate options, received ${options.autogenerateOptions}`
         )
       } else {
         this.AutogenerateOptions = new IntegerAutogenerateOptions(

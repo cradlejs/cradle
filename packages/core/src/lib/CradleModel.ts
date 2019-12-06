@@ -7,7 +7,7 @@ import { PropertyType } from './PropertyTypes/PropertyType'
  */
 export class CradleModel {
   public Name: string
-  public Meta: object
+  public Meta: { [key: string]: any }
   public Properties: Map<string, PropertyType>
   public Operations: Map<string, ICradleOperation>
 

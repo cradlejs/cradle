@@ -13,6 +13,7 @@ import { FileEmitter, FileEmitterOptionsArgs } from '@cradlejs/file-emitter'
 import _ from 'lodash'
 
 import pluralize from 'pluralize'
+import { GraphQLEmitterOptionsArgs } from './GraphQLEmitterOptions'
 
 class ApolloModel {
   public Schema: string
@@ -28,7 +29,8 @@ export default class ApolloEmitter extends FileEmitter {
   public getOperation
   private Models: ApolloModel[] = []
   private filesEmitted: string[] = []
-  constructor(options: FileEmitterOptionsArgs, output: string, console: IConsole) {
+  public options: GraphQLEmitterOptionsArgs
+  constructor(options: GraphQLEmitterOptionsArgs, output: string, console: IConsole) {
     super(options, output, console)
     if (options.formatting === 'prettier') {
       const prettierConfig = options.prettierConfig || {}
@@ -115,11 +117,19 @@ ${generalOutput.join('\n')}
     const mutationDefs: string[] = []
 
     operationNames.forEach((opName) => {
-      const operationArgs = this.getArgsTypeNameForOperation(opName)
       const returnType = this.getGraphqlTypeFromPropertyType(
         model.Operations[opName]!.Returns
       ).replace('!', '')
-      mutationDefs.push(`\t${opName}(data: ${operationArgs}!): ${returnType}`)
+      if (this.options.noMutationDataObject) {
+        const operation = model.Operations[opName]
+        const fieldNames = this.getOperationFieldNames(operation)
+        const finalArgs = fieldNames.join(', ').replace(/!/gi, '')
+        mutationDefs.push(`\t${opName}(${finalArgs}): ${returnType}`)
+      } else {
+        const operationArgs = this.getArgsTypeNameForOperation(opName)
+
+        mutationDefs.push(`\t${opName}(data: ${operationArgs}!): ${returnType}`)
+      }
     })
 
     if (mutationDefs.length > 0) {
@@ -132,7 +142,7 @@ ${mutationDefs.join('\n')}
   }
 
   private shouldExcludeFromRootQuery(model: CradleModel) {
-    return model.Meta && !!model.Meta['noRootQuery']
+    return model.Meta && !!model.Meta.noRootQuery
   }
 
   public getQueryDefsForModel(model: CradleModel): string {
@@ -182,8 +192,9 @@ type Query {
 ${localFields.join('\n')}
 }`)
 
-    if (model.Operations) {
+    if (model.Operations && !this.options.noMutationDataObject) {
       const operationNames = Object.keys(model.Operations)
+
       operationNames.forEach((opName) => {
         const operationArgsTypeDef = this.getSchemaForOperationArgs(
           opName,
@@ -196,7 +207,7 @@ ${localFields.join('\n')}
     return typeDefs.join('\n\n')
   }
 
-  public getSchemaForOperationArgs(operationName: string, operation: ICradleOperation): string {
+  private getOperationFieldNames(operation: ICradleOperation): string[] {
     const localFields: string[] = []
     const fieldNames = Object.keys(operation.Arguments)
     fieldNames.forEach((fn) => {
@@ -204,7 +215,11 @@ ${localFields.join('\n')}
       const gqlType = this.getGraphqlTypeFromPropertyType(prop, true)
       localFields.push(`\t${fn}: ${gqlType}`)
     })
+    return localFields
+  }
 
+  public getSchemaForOperationArgs(operationName: string, operation: ICradleOperation): string {
+    const localFields = this.getOperationFieldNames(operation)
     const argsTypeName = this.getArgsTypeNameForOperation(operationName)
     return `input ${argsTypeName} {
 ${localFields.join('\n')}
