@@ -1,6 +1,6 @@
 {
   "name": "@cradlejs/typescript-sequelize-emitter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "",
   "main": "./dist/index.js",
@@ -20,8 +20,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cradlejs/core": "^0.3.0",
-    "@cradlejs/typescript-emitter": "^0.3.0",
+    "@cradlejs/core": "^0.3.1",
+    "@cradlejs/typescript-emitter": "^0.3.1",
     "@types/node": "^12.12.14",
     "ts-morph": "^2.3.0",
     "typescript": "^3.7.3"
