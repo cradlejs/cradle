@@ -77,7 +77,8 @@ export class TypeScriptEmitter extends FileEmitter {
       properties.push({
         name: propName,
         leadingTrivia,
-        type: this.wrapMapType(model.Properties[propName])
+        type: this.wrapMapType(prop),
+        hasQuestionToken: prop.AllowNull
       })
     })
 
@@ -108,7 +109,8 @@ export class TypeScriptEmitter extends FileEmitter {
           properties.push({
             name: propName,
             leadingTrivia,
-            type: this.wrapMapType(prop)
+            type: this.wrapMapType(prop),
+            hasQuestionToken: prop.AllowNull
           })
         })
 
